@@ -11,23 +11,24 @@ export default function EmployeeTable({ employees, onDelete }) {
     <table className="w-full border rounded-lg">
       <thead className="bg-gray-50">
         <tr>
-          <th className="px-4 py-2 text-left">ID</th>
+          <th className="px-4 py-2 text-left">Employee ID</th>
           <th className="px-4 py-2 text-left">Name</th>
           <th className="px-4 py-2 text-left">Email</th>
           <th className="px-4 py-2 text-left">Department</th>
-          <th></th>
+          <th className="px-4 py-2 text-right">Action</th>
         </tr>
       </thead>
+
       <tbody>
         {employees.map((e) => (
-          <tr key={e.id} className="border-t">
-            <td className="px-4 py-2">{e.id}</td>
-            <td className="px-4 py-2">{e.name}</td>
+          <tr key={e.employee_id} className="border-t">
+            <td className="px-4 py-2">{e.employee_id}</td>
+            <td className="px-4 py-2">{e.full_name}</td>
             <td className="px-4 py-2">{e.email}</td>
             <td className="px-4 py-2">{e.department}</td>
             <td className="px-4 py-2 text-right">
               <button
-                onClick={() => onDelete(e.id)}
+                onClick={() => onDelete(e.employee_id)}
                 className="text-red-600 hover:underline"
               >
                 Delete

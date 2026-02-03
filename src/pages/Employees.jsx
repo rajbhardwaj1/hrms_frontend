@@ -1,76 +1,123 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "../api/axios";
 import Card from "../components/ui/Card";
 import EmployeeForm from "../components/employees/EmployeeForm";
 import EmployeeTable from "../components/employees/EmployeeTable";
 
 export default function Employees() {
   const [employees, setEmployees] = useState([]);
-  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [formErrors, setFormErrors] = useState({});
 
-  function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // ---------------------------
+  // Fetch Employees
+  // ---------------------------
+  async function fetchEmployees() {
+    setLoading(true);
+    setError("");
+    try {
+      const response = await api.get("/employees/");
+      setEmployees(response.data);
+    } catch (err) {
+      setError("Failed to load employees",);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  function addEmployee(e) {
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
+  // ---------------------------
+  // Add Employee
+  // ---------------------------
+  async function addEmployee(e) {
     e.preventDefault();
     const form = e.target;
 
-    const data = {
-      id: form.id.value.trim(),
-      name: form.name.value.trim(),
+    const payload = {
+      employee_id: form.id.value.trim(),
+      full_name: form.name.value.trim(),
       email: form.email.value.trim(),
       department: form.department.value,
     };
 
-    const newErrors = {};
+    setFormErrors({});
+    setError("");
 
-    // Required checks
-    if (!data.department) {
-      newErrors.department = "Department is required";
+    try {
+      setLoading(true);
+      const response = await api.post("/employees/", payload);
+      setEmployees(prev => [...prev, response.data]);
+      form.reset();
+    } catch (err) {
+      if (err.response?.status === 400) {
+        setFormErrors(err.response.data);
+      } else {
+        setError("Unable to add employee");
+      }
+    } finally {
+      setLoading(false);
     }
-
-    // Email format
-    if (!isValidEmail(data.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    // Duplicate Employee ID
-    if (employees.some((e) => e.id === data.id)) {
-      newErrors.id = "Employee ID already exists";
-    }
-
-    // Duplicate Email
-    if (employees.some((e) => e.email === data.email)) {
-      newErrors.email = "Email already exists";
-    }
-
-    // Stop if errors
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    // Clear errors & save
-    setErrors({});
-    setEmployees([...employees, data]);
-    form.reset();
   }
 
-  function deleteEmployee(id) {
-    setEmployees(employees.filter((e) => e.id !== id));
+  // ---------------------------
+  // Delete Employee
+  // ---------------------------
+  async function deleteEmployee(employeeId) {
+  if (!window.confirm("Are you sure you want to delete this employee?")) {
+    return;
   }
 
+  try {
+    setLoading(true);
+    setError("");
+
+    await api.delete(`/employees/${employeeId}/`);
+
+    setEmployees(prev =>
+      prev.filter(emp => emp.employee_id !== employeeId)
+    );
+  } catch (err) {
+    setError("Failed to delete employee");
+  } finally {
+    setLoading(false);
+  }
+}
+
+
+  // ---------------------------
+  // UI
+  // ---------------------------
   return (
     <div className="space-y-6">
       <Card title="Add Employee">
-        <EmployeeForm onAdd={addEmployee} errors={errors} />
+        <EmployeeForm onAdd={addEmployee} errors={formErrors} />
       </Card>
 
       <Card title="Employee List">
-        <EmployeeTable
-          employees={employees}
-          onDelete={deleteEmployee}
-        />
+        {loading && (
+          <p className="text-sm text-gray-500">Loading...</p>
+        )}
+
+        {error && (
+          <p className="text-sm text-red-600">{error}</p>
+        )}
+
+        {!loading && employees.length === 0 && (
+          <p className="text-sm text-gray-500">
+            No employees found.
+          </p>
+        )}
+
+        {!loading && employees.length > 0 && (
+          <EmployeeTable
+            employees={employees}
+            onDelete={deleteEmployee}
+          />
+        )}
       </Card>
     </div>
   );
