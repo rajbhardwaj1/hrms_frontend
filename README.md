@@ -1,18 +1,112 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+📘 HRMS Lite – Frontend
+Overview
+HRMS Lite Frontend is a modern, responsive web interface for managing employees and tracking daily attendance.
+It is designed to be clean, professional, and production‑ready, focusing on usability and clarity.
 
-Currently, two official plugins are available:
+The frontend communicates with the HRMS backend via REST APIs.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Tech Stack
+React (Vite)
 
-## React Compiler
+Tailwind CSS v4
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Axios
 
-Note: This will impact Vite dev & build performances.
+JavaScript (ES6+)
 
-## Expanding the ESLint configuration
+Features
+Employee Management
+Add new employees
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Department selection via dropdown (IT, HR, Marketing, Other)
+
+View all employees
+
+Delete employees
+
+Client-side form validation
+
+Clear empty and loading states
+
+Attendance Management
+Mark daily attendance (Present / Absent)
+
+Filter attendance by date
+
+View attendance history per employee
+
+Display total present days per employee
+
+UI/UX
+Responsive design (desktop & mobile)
+
+Consistent typography and spacing
+
+Reusable components
+
+Professional layout
+
+Project Structure
+src/
+│── api/
+│   └── axios.js
+│── components/
+│   ├── EmployeeForm.jsx
+│   ├── EmployeeTable.jsx
+│   └── AttendanceTable.jsx
+│── pages/
+│   ├── RegisterEmployee.jsx
+│   └── Attendance.jsx
+│── App.jsx
+│── main.jsx
+│── index.css
+Environment Variables
+Create a .env file in the root:
+
+VITE_API_BASE_URL=http://127.0.0.1:8000/api
+Setup & Installation
+npm install
+npm run dev
+Frontend will run on:
+
+http://localhost:5173
+Styling (Tailwind)
+Tailwind is configured using:
+
+tailwind.config.js
+
+postcss.config.js
+
+All styles are written using utility classes in index.css and components.
+
+API Integration
+Axios instance:
+
+src/api/axios.js
+Handles:
+
+Base URL
+
+JSON requests
+
+Centralized API configuration
+
+Best Practices Followed
+Component reusability
+
+Clean folder structure
+
+Readable JSX
+
+Proper UI states (loading, empty, error)
+
+Future Improvements
+Authentication
+
+Pagination
+
+Role-based access
+
+UI animations

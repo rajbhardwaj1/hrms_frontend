@@ -2,15 +2,22 @@ import Input from "../ui/Input";
 import Select from "../ui/Select";
 import Button from "../ui/Button";
 
-export default function AttendanceForm() {
+export default function AttendanceForm({ onAdd }) {
   return (
-    <form className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Select label="Employee" options={["E001", "E002"]} />
-      <Input type="date" label="Date" />
-      <Select label="Status" options={["Present", "Absent"]} />
+    <form onSubmit={onAdd} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <Input label="Employee ID" name="employeeId" required />
+      <Input label="Employee Name" name="employeeName" required />
+      <Input label="Date" name="date" type="date" required />
 
-      <div className="md:col-span-3">
-        <Button>Mark Attendance</Button>
+      <Select
+        label="Status"
+        name="status"
+        options={["Present", "Absent"]}
+        required
+      />
+
+      <div className="md:col-span-2">
+        <Button type="submit">Mark Attendance</Button>
       </div>
     </form>
   );
