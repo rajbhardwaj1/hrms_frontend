@@ -1,30 +1,23 @@
-import { useEffect, useState } from "react";
-import api from "../api/axios";
+import { useState } from "react";
 import EmployeeForm from "../components/EmployeeForm";
 import EmployeeTable from "../components/EmployeeTable";
 
 export default function RegisterEmployee() {
   const [employees, setEmployees] = useState([]);
 
-  const fetchEmployees = async () => {
-    try {
-      const res = await api.get("/employees/");
-      setEmployees(res.data);
-    } catch {
-      console.log("Backend not connected yet");
-    }
-  };
-
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
-
   return (
     <>
-      <h2>Register Employee</h2>
-      <EmployeeForm onSuccess={fetchEmployees} />
+      <h2 className="text-xl font-semibold mb-4">Register Employee</h2>
+      <EmployeeForm
+        onSuccess={() =>
+          setEmployees((prev) => [
+            ...prev,
+            { name: "Demo", email: "demo@mail.com", department: "IT", designation: "Dev" },
+          ])
+        }
+      />
 
-      <h3>Registered Employees</h3>
+      <h2 className="text-xl font-semibold mt-10">Registered Employees</h2>
       <EmployeeTable employees={employees} />
     </>
   );

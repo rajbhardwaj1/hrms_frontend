@@ -1,24 +1,35 @@
-export default function EmployeeTable({ employees }) {
+export default function EmployeeTable({ employees = [] }) {
+  if (!employees.length) {
+    return (
+      <p className="text-gray-500 mt-6 text-center">
+        No employees registered yet.
+      </p>
+    );
+  }
+
   return (
-    <table border="1">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Department</th>
-          <th>Designation</th>
-        </tr>
-      </thead>
-      <tbody>
-        {employees.map(emp => (
-          <tr key={emp.id}>
-            <td>{emp.name}</td>
-            <td>{emp.email}</td>
-            <td>{emp.department}</td>
-            <td>{emp.designation}</td>
+    <div className="overflow-x-auto mt-6">
+      <table className="w-full bg-white shadow rounded-lg">
+        <thead className="bg-gray-100">
+          <tr>
+            {["Name", "Email", "Department", "Designation"].map((h) => (
+              <th key={h} className="px-4 py-2 text-left text-sm font-semibold">
+                {h}
+              </th>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {employees.map((emp, i) => (
+            <tr key={i} className="border-t">
+              <td className="px-4 py-2">{emp.name}</td>
+              <td className="px-4 py-2">{emp.email}</td>
+              <td className="px-4 py-2">{emp.department}</td>
+              <td className="px-4 py-2">{emp.designation}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
