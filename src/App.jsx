@@ -1,19 +1,30 @@
-import RegisterEmployee from "./pages/RegisterEmployee";
+import { useState } from "react";
+import Sidebar from "./components/layout/Sidebar";
+import Header from "./components/layout/Header";
+import Employees from "./pages/Employees";
+import Attendance from "./pages/Attendance";
 
-function App() {
+export default function App() {
+  const [active, setActive] = useState("employees");
+
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-indigo-600 text-white py-4 shadow">
-        <h1 className="text-center text-2xl font-semibold">
-          HRMS – Employee Registration
-        </h1>
-      </header>
+    <div className="flex">
+      <Sidebar active={active} setActive={setActive} />
 
-      <main className="max-w-6xl mx-auto p-4">
-        <RegisterEmployee />
-      </main>
+      <div className="flex-1 bg-gray-50 min-h-screen">
+        <Header
+          title={
+            active === "employees"
+              ? "Employee Management"
+              : "Attendance Management"
+          }
+        />
+
+        <main className="p-6">
+          {active === "employees" && <Employees />}
+          {active === "attendance" && <Attendance />}
+        </main>
+      </div>
     </div>
   );
 }
-
-export default App;
